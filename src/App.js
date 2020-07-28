@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import Home from './components/home'
+import Navigation from './components/navigation';
+import { Modal } from '@material-ui/core';
+import AddItem from './components/add-item-form';
 
-function App() {
+const App = () => {
+
+  const getModalStyle = () => {
+    const top = 10;
+    const left = 1;
+
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+    };
+  }
+
+  const [addItemModalOpen, setAddItemOpen] = useState(false);
+  const [items, setItems] = useState([]);
+
+  const addItem = value => {
+    setItems([...items, value]);
+    setAddItemOpen(false);
+  }
+
+  const onAddItemClicked = () => {
+    setAddItemOpen(true);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Modal
+        open={addItemModalOpen}
+        onClose={() => setAddItemOpen(false)}
+        aria-labelledby="add-item-modal"
+        aria-describedby="add-item-modal"
+        style={getModalStyle()}
+      >
+        <AddItem submit={addItem} />
+      </Modal>
+      <Navigation handleAddItem={onAddItemClicked} />
+      <Home items={items} />
     </div>
-  );
+  )
 }
 
 export default App;
